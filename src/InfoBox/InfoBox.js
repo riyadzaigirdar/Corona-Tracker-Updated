@@ -1,40 +1,41 @@
 import React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import "./InfoBox.css";
-import CountUp from "react-countup";
 
-function InfoBox({ title, cases, total, changeGraph, selected }) {
-
+function InfoBox({ title, cases, total, changeGraph, chartstate, selected }) {
+  let choosedColor
+  let borderstyle
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  console.log(selected)
+  if (chartstate) {
+    choosedColor = ((chartstate === 'cases' && "rgb(20, 64, 185)") ||
+      (chartstate === 'recovered' && "rgb(46, 212, 60)") ||
+      (chartstate === 'deaths' && "rgba(255,0,0,0.5)"))
+  }
+  if (selected) {
+    borderstyle = ` 5px solid ${choosedColor}`
+  }
+
   return (
-    <Card className={`card ${selected && 'selected'}`} onClick={() => changeGraph(title)}>
-      <CardContent>
+    <Card style={{ borderBottom: borderstyle }} className="card" onClick={() => changeGraph(title)}>
+      <CardContent  >
         <Typography className="card__title" color="textSecondary">
           Today's {capitalizeFirstLetter(title)}
         </Typography>
-        <h2 className="card__cases">
-          {cases !== undefined && (
-            <CountUp start={0} end={cases} duration={2.5} separator=","
-            />
-          )}
+        <h2
+          style={{
+            color: choosedColor
+          }}
+          className="card__cases"
+        >
+          {cases}
         </h2>
         <Typography className="card__total" color="textSecondary">
-          <strong>Total: </strong>
-          {total && (
-            <CountUp
-              start={0}
-              end={total}
-              duration={2.5}
-              separator=","
-
-            ></CountUp>
-          )}
+          <strong>Total: {total}</strong>
         </Typography>
       </CardContent>
-    </Card>
+    </Card >
   );
 }
 

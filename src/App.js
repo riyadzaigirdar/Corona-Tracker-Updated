@@ -5,7 +5,10 @@ import {
   MenuItem,
   Card,
   CardContent,
+  Button
 } from "@material-ui/core";
+import GitHubIcon from '@material-ui/icons/GitHub';
+import { prettyPrintStat } from './utils'
 
 import "./App.css";
 import axios from "axios";
@@ -15,6 +18,7 @@ import Chart from "./Chart/Chart"
 import Map from "./Map/Map";
 // need this below import for the map working 
 import "leaflet/dist/leaflet.css"
+import numeral from 'numeral'
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -46,55 +50,67 @@ function App() {
       <div className="app__left">
         <div className="app__left__header">
           <h2>Covid-19 Tracker</h2>
-          <FormControl>
-            <Select
-              variant="outlined"
-              value={country}
-              onChange={(e) => {
-                setCountry(e.target.value)
-                countries.forEach((country) => {
-                  if (country.country === e.target.value) {
-                    setMapZoom(3)
-                    return setMapCenter([country.countryInfo.lat, country.countryInfo.long])
-                  }
-                  if (e.target.value === 'all') {
-                    setMapZoom(3)
-                  }
-                })
-              }}
-            >
-              <MenuItem value="all">Worldwide</MenuItem>
-              {countries.length !== 0 &&
-                countries.map(({ country }, index) => (
-                  <MenuItem key={index} value={country}>
-                    {country}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
+          <div className="app__left__header__right">
+            <Button href="https://github.com/riyadzaigirdar/Corona-Tracker-Updated" color="secondary" >
+              <GitHubIcon /><strong style={{ marginLeft: '5px' }}> Github Code</strong></Button>
+            <FormControl>
+              <Select
+                variant="outlined"
+                value={country}
+                onChange={(e) => {
+                  setCountry(e.target.value)
+                  countries.forEach((country) => {
+                    if (country.country === e.target.value) {
+                      setMapZoom(3)
+                      return setMapCenter([country.countryInfo.lat, country.countryInfo.long])
+                    }
+                    if (e.target.value === 'all') {
+                      setMapZoom(3)
+                    }
+                  })
+                }}
+              >
+                <MenuItem value="all">Worldwide</MenuItem>
+                {countries.length !== 0 &&
+                  countries.map(({ country }, index) => (
+                    <MenuItem key={index} value={country}>
+                      {country}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </div>
         </div>
         <div className="app__left__stats">
-          <InfoBox
-            title="cases"
-            cases={info.todayCases}
-            total={info.cases}
-            selected={chartstate === 'cases'}
-            changeGraph={setChartState}
-          />
-          <InfoBox
-            title="recovered"
-            cases={info.todayRecovered}
-            total={info.recovered}
-            selected={chartstate === 'recovered'}
-            changeGraph={setChartState}
-          />
-          <InfoBox
-            title="deaths"
-            cases={info.todayDeaths}
-            total={info.deaths}
-            selected={chartstate === 'deaths'}
-            changeGraph={setChartState}
-          />
+          {info.cases &&
+            <>
+
+              <InfoBox
+                title="cases"
+                chartstate={chartstate}
+                cases={prettyPrintStat(info.todayCases)}
+                total={numeral(info.cases).format("0.0a")}
+                selected={chartstate === 'cases'}
+                changeGraph={setChartState}
+              />
+              <InfoBox
+                title="recovered"
+                chartstate={chartstate}
+                cases={prettyPrintStat(info.todayRecovered)}
+                total={numeral(info.recovered).format("0.0a")}
+                selected={chartstate === 'recovered'}
+                changeGraph={setChartState}
+              />
+              <InfoBox
+                title="deaths"
+                chartstate={chartstate}
+                cases={prettyPrintStat(info.todayDeaths)}
+                total={numeral(info.deaths).format("0.0a")}
+                selected={chartstate === 'deaths'}
+                changeGraph={setChartState}
+              />
+            </>
+          }
         </div>
         <Map cases={chartstate} countries={countries} center={mapcenter} zoom={mapzoom} />
       </div>

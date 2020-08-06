@@ -22,6 +22,11 @@
   margin:5px 0px;
   align-items: center;
 }
+
+.app__left__header__right{
+  display: flex;
+}
+
 .app__left__stats {
   display: flex;
   justify-content: space-between;

@@ -24,7 +24,7 @@ const casesTypeColors = {
 };
 
 export const prettyPrintStat = (stat) =>
-    stat ? `+${numeral(stat).format("0.0a")}` : "+0";
+    stat ? numeral(stat).format("0,0 a") : "0";
 
 export const showDataOnMap = (data, casesType = "cases") =>
     data.map((country) => (
@@ -39,11 +39,10 @@ export const showDataOnMap = (data, casesType = "cases") =>
         >
             <Popup>
                 <div className="info-container">
-                    <div
-                        className="info-flag"
-                        style={{ backgroundImage: `url(${country.countryInfo.flag})` }}
-                    ></div>
-                    <div className="info-name">{country.country}</div>
+                    <div className="info-name" style={{ alignContent: "center" }}>
+                        <img style={{ marginRight: "5px" }} width="20px" src={country.countryInfo.flag} alt='country flag'></img>
+                        {country.country}
+                    </div>
                     <div className="info-confirmed">
                         Cases: {numeral(country.cases).format("0,0")}
                     </div>
