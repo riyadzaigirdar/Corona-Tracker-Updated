@@ -14,7 +14,7 @@ function InfoBox({ title, cases, total, changeGraph, chartstate, selected }) {
       (chartstate === 'deaths' && "rgba(255,0,0,0.5)"))
   }
   if (selected) {
-    borderstyle = ` 5px solid ${choosedColor}`
+    borderstyle = `5px solid ${choosedColor}`
   }
 
   return (
