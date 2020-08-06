@@ -1,0 +1,20 @@
+.card {
+  width: 30%;
+  word-wrap: break-word;
+  
+}
+
+.card > CardContent{
+  color:black;
+}
+
+.selected{
+  background-color: rgb(207, 207, 207)!important;
+}
+
+@media(max-width:530px){
+  .card {
+    width: 34%;   
+  }
+}
+
